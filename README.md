@@ -16,6 +16,8 @@ after that i will rigirously tune the Kp Ki and Kd values untill the prototype m
 
 i will make thos prototype work and not focus on any aestehtics because i can always upgrade them in the later V2 
 
+(UPDATE): The prototype V1 will be 2 axis only because it is easier to debug and develop the code unto  
+
 # Stages of prototype 
 1. gimbal 3D design and iteration
 2. printing the design
