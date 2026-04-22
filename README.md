@@ -17,6 +17,7 @@ after that i will rigirously tune the Kp Ki and Kd values untill the prototype m
 i will make thos prototype work and not focus on any aestehtics because i can always upgrade them in the later V2 
 
 (UPDATE): The prototype V1 will be 2 axis only because it is easier to debug and develop the code unto  
+(UPDATE): i will combine hmc5883l magnetometer with mpu6050 because the mpu6050 does not have any magnetic rotary encoder which means it will give unrelaible yaw values which will drift over time 
 
 # Stages of prototype 
 1. gimbal 3D design and iteration
