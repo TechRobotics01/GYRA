@@ -1,74 +1,106 @@
 #include <Wire.h>
 #include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
 #include <ESP32Servo.h>
-
-const int servo1 = 18;
-const int servo2 = 19;
-
-Servo s1;
-Servo s2;
-
-unsigned long prevTime = 0;
-float yaw = 0;
+#include <PID_v1.h>
 
 Adafruit_MPU6050 mpu;
-Adafruit_Sensor *mpu_ax, *mpu_gr;
+Servo s2;
+
+// ---------- PID ----------
+double input = 0;
+double output = 0;
+double setpoint = 0;
+
+double Kp = 1.2, Ki = 1.6, Kd = 0.6;
+PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
+
+// ---------- FILTER ----------
+float angle = 0.0;
+float gyroBiasY = 0.0;
+unsigned long lastTime = 0;
+
+// ---------- SERVO ----------
+float servoSmooth = 90.0;
+const int servoPin = 19;
 
 void setup() {
   Serial.begin(115200);
+  Wire.begin(21, 22);
+  Wire.setClock(400000);
 
-  Wire.begin(21, 22);   // IMPORTANT FIX
-
-  s1.attach(servo1);
-  s2.attach(servo2);
-
-  Serial.println("WELCOME TO GYRA");
+  s2.attach(servoPin, 500, 2400);
+  s2.write(90);
 
   if (!mpu.begin()) {
     Serial.println("MPU6050 not found");
-    while (1) delay(10);
+    while (1);
   }
 
-  Serial.println("MPU6050 FOUND!");
+  mpu.setAccelerometerRange(MPU6050_RANGE_4_G);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
-  mpu_ax = mpu.getAccelerometerSensor();
-  mpu_gr = mpu.getGyroSensor();
+  // 🔧 Gyro calibration (KEEP STILL)
+  Serial.println("Calibrating...");
+  delay(1000);
 
-  mpu_ax->printSensorDetails();
-  mpu_gr->printSensorDetails();
+  float sum = 0;
+  for (int i = 0; i < 300; i++) {
+    sensors_event_t a, g, t;
+    mpu.getEvent(&a, &g, &t);
+    sum += g.gyro.y;
+    delay(5);
+  }
+  gyroBiasY = sum / 300.0;
+
+  myPID.SetOutputLimits(-90, 90);
+  myPID.SetMode(AUTOMATIC);
+
+  lastTime = micros();
+  Serial.println("READY (PITCH AXIS)");
 }
 
 void loop() {
-  sensors_event_t ax;
-  sensors_event_t gr;
+  sensors_event_t a, g, t;
+  mpu.getEvent(&a, &g, &t);
 
-  mpu_ax->getEvent(&ax);
-  mpu_gr->getEvent(&gr);
+  // ----- TIME -----
+  unsigned long now = micros();
+  float dt = (now - lastTime) / 1000000.0;
+  lastTime = now;
 
-  float ax_val = ax.acceleration.x;
-  float ay_val = ax.acceleration.y;
-  float az_val = ax.acceleration.z;
+  if (dt <= 0 || dt > 0.05) dt = 0.01;
 
-  unsigned long currentTime = millis();
-  float dt = (currentTime - prevTime) / 1000.0;
-  prevTime = currentTime;
+  // 🔥 CORRECT PITCH AXIS (FORWARD/BACK)
+  float accAngle = atan2(-a.acceleration.x,
+                         sqrt(a.acceleration.y * a.acceleration.y +
+                              a.acceleration.z * a.acceleration.z)) * 180.0 / PI;
 
-  float roll = atan2(ay_val, az_val) * 180 / PI;
+  float gyroRate = (g.gyro.y - gyroBiasY) * 180.0 / PI;
 
-  float gz = gr.gyro.z;
-  yaw += gz * dt * 180 / PI;
+  // ----- COMPLEMENTARY FILTER -----
+  angle = 0.98 * (angle + gyroRate * dt) + 0.02 * accAngle;
 
-  // FIXED mapping for servo (0–180)
-  yaw = constrain(yaw, 0, 180);
-  roll = constrain(roll, 0, 180);
+  input = angle;
 
-  Serial.print("ROLL: ");
-  Serial.print(roll);
-  Serial.print(" YAW: ");
-  Serial.println(yaw);
+  // ----- PID -----
+  myPID.Compute();
 
-  s1.write(yaw);
-  s2.write(roll);
+  // 🔥 SERVO COMMAND
+  float targetServo = 90.0 + output;
+
+  // smoothing
+  servoSmooth = 0.75 * servoSmooth + 0.25 * targetServo;
+  servoSmooth = constrain(servoSmooth, 0, 180);
+
+  s2.write((int)servoSmooth);
+
+  // debug
+  Serial.print("Angle: ");
+  Serial.print(angle);
+  Serial.print(" Servo: ");
+  Serial.println(servoSmooth);
 
   delay(10);
 }
