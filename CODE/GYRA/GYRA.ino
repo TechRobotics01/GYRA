@@ -1,239 +1,233 @@
 #include <Wire.h>
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
+#include <MPU6050_tockn.h>
 #include <ESP32Servo.h>
 #include <PID_v1.h>
-#include <esp_task_wdt.h>
 
-Adafruit_MPU6050 mpu;
-Servo s2;
-Servo s3;
+// ---------- MPU6050 ----------
+MPU6050 mpu(Wire);
+
+// ---------- SERVOS ----------
+Servo servoRoll;
+Servo servoPitch;
 
 // ---------- PINS ----------
 const int SDA_PIN = 21;
 const int SCL_PIN = 22;
-const int SERVO_PINR = 19;
-const int SERVO_PINP = 18;
+
+const int ROLL_SERVO_PIN  = 19;
+const int PITCH_SERVO_PIN = 18;
 
 // ---------- PID ROLL ----------
-double input = 0;
-double output = 0;
-double setpoint = 0;
+double rollInput = 0;
+double rollOutput = 0;
+double rollSetpoint = 0;
 
-double Kp = 1.2, Ki = 0, Kd = 0.1;
-PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
+double KpR = 1.2;
+double KiR = 0;
+double KdR = 0.1;
+
+PID pidRoll(
+  &rollInput,
+  &rollOutput,
+  &rollSetpoint,
+  KpR,
+  KiR,
+  KdR,
+  DIRECT
+);
 
 // ---------- PID PITCH ----------
-double inputP = 0;
-double outputP = 0;
-double setpointP = 0;
-double KpP, KiP, KdP;
-PID pidPitch(&inputP, &outputP, &setpointP, KpP, KiP, KdP, DIRECT);
+double pitchInput = 0;
+double pitchOutput = 0;
+double pitchSetpoint = 0;
 
-// ---------- FILTER ----------
-float angle = 0.0;
-float pitch = 0.0;
-float gyroBiasY = 0.0;
-float gyroBiasX = 0.0;
-unsigned long lastTime = 0;
+double KpP;
+double KiP;
+double KdP;
 
-// ---------- SERVO ----------
-float servoSmooth = 90.0;
-float servoPitch = 90.0;
+PID pidPitch(
+  &pitchInput,
+  &pitchOutput,
+  &pitchSetpoint,
+  KpP,
+  KiP,
+  KdP,
+  DIRECT
+);
 
-// ---------- WATCHDOG ----------
-#define WDT_TIMEOUT_SEC 5
+// ---------- SMOOTHING ----------
+float smoothRoll  = 90;
+float smoothPitch = 90;
 
 // ---------- SERIAL INPUT ----------
-double readDoubleFromSerial(const char *prompt) {
+double readDoubleFromSerial(
+  const char *prompt
+) {
+
   Serial.println(prompt);
 
-  while (true) {
-    while (Serial.available() == 0) {
-      esp_task_wdt_reset();
-      delay(10);
-    }
-
-    String s = Serial.readStringUntil('\n');
-    s.trim();
-
-    if (s.length() == 0) {
-      Serial.println("Enter a valid number:");
-      continue;
-    }
-
-    return s.toFloat();
-  }
-}
-
-// ---------- CALIBRATION ----------
-bool calibrateGyro() {
-  Serial.println("Calibrating... KEEP STILL");
-
-  const int targetSamples = 300;
-  unsigned long start = millis();
-
-  int count = 0;
-  float sumY = 0;
-  float sumX = 0;
-
-  while (count < targetSamples && (millis() - start < 10000)) {
-    sensors_event_t a, g, t;
-    mpu.getEvent(&a, &g, &t);
-
-    if (!isnan(g.gyro.y) && !isnan(g.gyro.x)) {
-      sumY += g.gyro.y;
-      sumX += g.gyro.x;
-      count++;
-    }
-
-    esp_task_wdt_reset();
-    delay(5);
+  while (Serial.available() == 0) {
+    delay(10);
   }
 
-  if (count == 0) return false;
+  String s =
+    Serial.readStringUntil('\n');
 
-  gyroBiasY = sumY / count;
-  gyroBiasX = sumX / count;
+  s.trim();
 
-  Serial.print("Gyro Bias Y: ");
-  Serial.println(gyroBiasY, 6);
-  Serial.print("Gyro Bias X: ");
-  Serial.println(gyroBiasX, 6);
-
-  return true;
+  return s.toFloat();
 }
 
 void setup() {
+
   Serial.begin(115200);
+
   delay(2000);
 
-  esp_task_wdt_config_t wdt_config = {
-    .timeout_ms = WDT_TIMEOUT_SEC * 1000,
-    .idle_core_mask = (1 << portNUM_PROCESSORS) - 1,
-    .trigger_panic = true
-  };
+  // ---------- I2C ----------
+  Wire.begin(
+    SDA_PIN,
+    SCL_PIN
+  );
 
-  esp_task_wdt_init(&wdt_config);
-  esp_task_wdt_add(NULL);
-
-  Wire.begin(SDA_PIN, SCL_PIN);
   Wire.setClock(400000);
-  Wire.setTimeOut(50);
 
-  if (!mpu.begin()) {
-    Serial.println("MPU6050 not found");
-    while (1) {
-      esp_task_wdt_reset();
-      delay(1000);
-    }
-  }
+  // ---------- MPU6050 ----------
+  mpu.begin();
 
-  mpu.setAccelerometerRange(MPU6050_RANGE_4_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+  Serial.println("KEEP MPU6050 STILL");
 
-  // ---------- PITCH PID INPUT ----------
-  KpP = readDoubleFromSerial("Enter Pitch Kp:");
-  Serial.println(KpP, 6);
+  delay(1000);
 
-  KiP = readDoubleFromSerial("Enter Pitch Ki:");
-  Serial.println(KiP, 6);
+  // ---------- GYRO CAL ----------
+  mpu.calcGyroOffsets(true);
 
-  KdP = readDoubleFromSerial("Enter Pitch Kd:");
-  Serial.println(KdP, 6);
+  Serial.println("GYRO CALIBRATION DONE");
 
-  pidPitch.SetTunings(KpP, KiP, KdP);
+  // ---------- PITCH PID ----------
+  KpP =
+    readDoubleFromSerial(
+      "Enter Pitch Kp:"
+    );
 
-  // ---------- CALIBRATION ----------
-  if (!calibrateGyro()) {
-    Serial.println("Calibration failed!");
-    while (1) {
-      esp_task_wdt_reset();
-      delay(1000);
-    }
-  }
+  KiP =
+    readDoubleFromSerial(
+      "Enter Pitch Ki:"
+    );
 
-  // ---------- SERVO ----------
-  s2.attach(SERVO_PINR, 500, 2400);
-  s2.write(90);
-  s3.attach(SERVO_PINP, 500, 2400);
-  s3.write(90);
-  delay(300);
+  KdP =
+    readDoubleFromSerial(
+      "Enter Pitch Kd:"
+    );
 
-  myPID.SetOutputLimits(-90, 90);
-  pidPitch.SetOutputLimits(-90, 90);
+  pidPitch.SetTunings(
+    KpP,
+    KiP,
+    KdP
+  );
 
-  myPID.SetMode(AUTOMATIC);
+  // ---------- SERVOS ----------
+  servoRoll.attach(
+    ROLL_SERVO_PIN,
+    500,
+    2400
+  );
+
+  servoPitch.attach(
+    PITCH_SERVO_PIN,
+    500,
+    2400
+  );
+
+  servoRoll.write(90);
+  servoPitch.write(90);
+
+  delay(1000);
+
+  // ---------- PID ----------
+  pidRoll.SetMode(AUTOMATIC);
   pidPitch.SetMode(AUTOMATIC);
 
-  lastTime = micros();
-  Serial.println("READY");
+  pidRoll.SetOutputLimits(-90, 90);
+  pidPitch.SetOutputLimits(-90, 90);
+
+  Serial.println("GIMBAL READY");
 }
 
 void loop() {
-  sensors_event_t a, g, t;
-  mpu.getEvent(&a, &g, &t);
 
-  unsigned long now = micros();
-  float dt = (now - lastTime) / 1000000.0;
-  lastTime = now;
+  // ---------- UPDATE MPU ----------
+  mpu.update();
 
-  if (dt <= 0 || dt > 0.05) dt = 0.01;
+  // ---------- GET ANGLES ----------
+  float rollAngle =
+    mpu.getAngleX();
 
-  // ---------- ROLL ----------
-  float accAngle = atan2(-a.acceleration.x,
-                         sqrt(a.acceleration.y * a.acceleration.y +
-                              a.acceleration.z * a.acceleration.z)) * 180.0 / PI;
+  float pitchAngle =
+    mpu.getAngleY();
 
-  float gyroRate = (g.gyro.y - gyroBiasY) * 180.0 / PI;
+  // ---------- PID INPUT ----------
+  rollInput = rollAngle;
+  pitchInput = pitchAngle;
 
-  angle = 0.98 * (angle + gyroRate * dt) + 0.02 * accAngle;
-
-  // ---------- PITCH (FILTERED NOW) ----------
-  float accPitch = atan2(a.acceleration.y,
-                         sqrt(a.acceleration.x * a.acceleration.x +
-                              a.acceleration.z * a.acceleration.z)) * 180.0 / PI;
-
-  float gyroPitch = (g.gyro.x - gyroBiasX) * 180.0 / PI;
-
-  pitch = 0.98 * (pitch + gyroPitch * dt) + 0.02 * accPitch;
-
-  if (isnan(angle) || isnan(pitch)) {
-    Serial.println("NaN error");
-    esp_task_wdt_reset();
-    return;
-  }
-
-  // ---------- PID ----------
-  input = angle;
-  myPID.Compute();
-
-  inputP = pitch;
+  // ---------- COMPUTE PID ----------
+  pidRoll.Compute();
   pidPitch.Compute();
 
-  float targetRoll = 90 + output;
-  float targetPitch = 90 + outputP;
+  // ---------- TARGETS ----------
+  float targetRoll =
+    90 + rollOutput;
 
-  // ---------- SMOOTH ----------
-  servoSmooth = 0.75 * servoSmooth + 0.25 * targetRoll;
-  servoPitch = 0.75 * servoPitch + 0.25 * targetPitch;
+  float targetPitch =
+    90 + pitchOutput;
 
-  servoSmooth = constrain(servoSmooth, 0, 180);
-  servoPitch = constrain(servoPitch, 0, 180);
+  // ---------- SMOOTHING ----------
+  smoothRoll =
+    0.75 * smoothRoll
+    +
+    0.25 * targetRoll;
 
-  s2.write((int)servoSmooth);
-  s3.write((int)servoPitch);
+  smoothPitch =
+    0.75 * smoothPitch
+    +
+    0.25 * targetPitch;
 
-  Serial.print("R:");
-  Serial.print(angle, 2);
-  Serial.print(" P:");
-  Serial.print(pitch, 2);
-  Serial.print(" SR:");
-  Serial.print(servoSmooth);
-  Serial.print(" SP:");
-  Serial.println(servoPitch);
+  // ---------- LIMITS ----------
+  smoothRoll =
+    constrain(
+      smoothRoll,
+      0,
+      180
+    );
 
-  esp_task_wdt_reset();
+  smoothPitch =
+    constrain(
+      smoothPitch,
+      0,
+      180
+    );
+
+  // ---------- MOVE SERVOS ----------
+  servoRoll.write(
+    (int)smoothRoll
+  );
+
+  servoPitch.write(
+    (int)smoothPitch
+  );
+
+  // ---------- DEBUG ----------
+  Serial.print("ROLL: ");
+  Serial.print(rollAngle);
+
+  Serial.print(" PITCH: ");
+  Serial.print(pitchAngle);
+
+  Serial.print(" SR: ");
+  Serial.print(smoothRoll);
+
+  Serial.print(" SP: ");
+  Serial.println(smoothPitch);
+
   delay(10);
 }
