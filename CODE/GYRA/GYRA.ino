@@ -355,7 +355,7 @@ void loop() {
 
   // ---------- TARGETS ----------
   float targetRoll  = 92.0f + output;
-  float targetPitch = 90.0f + outputP;
+  float targetPitch = 90.0f - outputP;
   float targetYaw   = 90.0f + outputY;
 
   // ---------- SMOOTH ----------
