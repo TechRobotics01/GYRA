@@ -4218,7 +4218,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "SW_EN"
 			(at 114.3 137.1599 90)
 			(effects
 				(font
@@ -4710,7 +4710,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "SW_IO0"
 			(at 154.94 137.1599 90)
 			(effects
 				(font

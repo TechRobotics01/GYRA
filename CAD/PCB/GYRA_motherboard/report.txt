@@ -1,0 +1,12 @@
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-F_Cu.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-B_Cu.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-F_Paste.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-B_Paste.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-F_Silkscreen.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-B_Silkscreen.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-F_Mask.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-B_Mask.gbr'.
+Plotted to 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-Edge_Cuts.gbr'.
+Created Gerber job file 'C:\Users\DELL\Desktop\MISSION FALLOUT\GYRA\GYRA\CAD\PCB\GYRA_motherboard\GYRA_motherboard-job.gbrjob'.
+Info: Done.
+Info: Done.
