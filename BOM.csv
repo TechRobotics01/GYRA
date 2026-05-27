@@ -1,0 +1,18 @@
+S. No,Part Name,Qty required,Qty Purchased,Cost per Unit($),Shipping cost ($),Total cost ($),Status,Supplier,Purchase Link 
+1,1kg PLA+(eSun),1,1,11.49,NA,11.49,Needed,robocraze,https://robocraze.com/products/esun-pla-basic-1-75mm-1kg-3d-printing-filament-black-color?variant=47677006217440
+2,MPU6050,1,1,NA,NA,NA,Already owned,NA,NA
+3,HMC5883L,1,1,1.98,NA,1.98,Needed,robocraze,https://robocraze.com/products/hmc5883l-triple-axis-compass?variant=40192560857241
+4,MG995 servos,3,NA,NA,NA,NA,Already owned,NA,NA
+5,18650 Li-ion battries,6,6,0.72,NA,4.32,Needed,robocraze,https://robocraze.com/products/3-7v-2000mah-18650-li-ion-battery?_pos=1&_sid=db8a20379&_ss=r
+6,2S Li-Ion BMS ,1,1,0.37,NA,0.37,Needed,makerbaxxar,https://makerbazar.in/products/18650-bms-lithium-battery-protection-board?variant=48251032731888
+7,DC power jack(male),1,1,0.089,NA,0.089,Needed,makerbazzar ,https://makerbazar.in/products/5-5-2-1mm-dc-power-jack-wire-with-open-end?variant=47599032140016
+8,DC power jack(female),1,1,0.094,NA,0.094,Needed,maker bazzar,https://makerbazar.in/products/5-5-2-1mm-dc-power-jack-wire-with-open-end?variant=47599032172784
+9,PCB Fab.,1,5,8.36,1.51,9.87,Needed,LionCircuits,https://order.lioncircuits.com/cart
+10,M3 screws,15,NA,NA,NA,NA,Already owned,NA,NA
+11,M2 screws,10,25,0.082,1.46,3.51,Needed,Onlyscrews,https://onlyscrews.in/products/m2-x-10mm-hex-allen-socket-head-high-tensile12-9-black-oxide-screw-dia-2mm-length-10mm?variant=49979287339321
+12,4pinJST Connector (female),4,4,0.17,NA,0.68,Needed,Robu,https://robu.in/product/1-0c-04y-1mm-4-pin-ultra-thin-female-housing-connector-with-300mm-wire28-awg/
+13,4pinJSt connector(male),4,4,0.048,NA,0.192,Needed,Robu,https://robu.in/product/a2512wv-4p-cjt-4-pin-2-50mm-180-wafer-male-connector-rohs/
+14,4.7uH inductor,1,5,0.25,NA,1.25,Needed,Robu,https://robu.in/product/cd43-4-7%C2%B5h-1a-smd-power-inductor-5-pcs/
+15,DIODES AP63203WU-7,1,2,0.9,1.05,2.86,Needed,LionCircuits,https://www.lioncircuits.com/parts/AP63203WU-7?srsltid=AfmBOorHSSSpOBPyPaL-4MNTWlzebuKzhXMFZgt0klPUoxMbe25VBEraKJY
+16,ESP32 S3 WROOM-1,1,1,4.5,0.89,5.39,Needed,Techeism,https://techiesms.com/product/esp32-s3-wroom-n16r8/
+,,,,,TOTAL COST,42.095,,,
