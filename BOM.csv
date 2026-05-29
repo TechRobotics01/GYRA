@@ -15,4 +15,6 @@ S. No,Part Name,Qty required,Qty Purchased,Cost per Unit($),Shipping cost ($),To
 14,4.7uH inductor,1,5,0.25,NA,1.25,Needed,Robu,https://robu.in/product/cd43-4-7%C2%B5h-1a-smd-power-inductor-5-pcs/
 15,DIODES AP63203WU-7,1,2,0.9,1.05,2.86,Needed,LionCircuits,https://www.lioncircuits.com/parts/AP63203WU-7?srsltid=AfmBOorHSSSpOBPyPaL-4MNTWlzebuKzhXMFZgt0klPUoxMbe25VBEraKJY
 16,ESP32 S3 WROOM-1,1,1,4.5,0.89,5.39,Needed,Techeism,https://techiesms.com/product/esp32-s3-wroom-n16r8/
-,,,,,TOTAL COST,42.095,,,
+17,Servo spline arm 25T,3,3,0.68,NA,2.04,Needed,Robu,https://robu.in/product/cnc-aluminum-steering-servo-horn-arm-futaba-standard-25t-aluminum/
+18,soldering station ,1,1,15,NA,15,Needed,Robu,https://robu.in/product/yihua-926-upgrade-version-soldering-iron-station/
+,,,,,TOTAL COST,59.135,,,
