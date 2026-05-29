@@ -1,27 +1,73 @@
-# GYRA
-GYRA is a 3 axis gimbal system onto which i can connect my point and shoot camera. This system will automatically stabelize pitch roll and yaw axes of the gimbal via a high frequency PID loop runnong on an esp32 which controls the 3 mg995 servo motors of the gimbal 
+# GYRA 
+So "GYRA" is a 3-axis stabilization gimbal system i built for phones and lighteight cameras more specifically point and shoot cameras<br>
+GYRA is fully custom built from the 3D Design to the motherboard PCB all made by ME <br>
+The name "GYRA" i derived from gyroscope which is a part of the MPU6050 sensor used in this project and GYRA also sounds pretty cool too <br>
 
-# details 
-so basically this systemn consists of these main parts 
-1. the 3d printed gimbal assembly
-2. the custom made pcb based on esp32 
-3. 3x mg995 metal gear servo motors
-4. 4x Li-ion battries with their custom charging board based on IP5328P IC 
+# PURPOSE
+So why exatly does this project exist <br>
+This project exists because of a few reasons
+- cheaper solution to ronin gymbals 
+- extremely good learning project 
+- fully custom built so i can easily add my own features
 
-# Prototype 
-so before making the actual project i will be working on making the prototype 
-basically i will design an extremely basic gymbal mount for mg995 servo motors and print it in PLA with my 3D printer after that i'll add the motors on the gymbal mount and then i will connect it to an esp32 and a charget and then i will control the motors via the esp32 after that i will add the PID control system and try to tune the motors also the camera will fit on the mount with a 1/4inch thread 
-after that i will rigirously tune the Kp Ki and Kd values untill the prototype mount is working as intended with minimum shakes after that i'll measure and note down the values such as the current the motors are consuming the minimum frequency of the loop and then i'll be keeping these values in my mind while designing the electronics and also i will amke the 3d printable design in many iterations and with lesser infill about so that i can save filament and also the entire mount assembly will be in 3 sub-parts first one is the base handel yaw axis and then is the upper roll axis and then the cmaera connector piece pitch axis and the imu sensor will be mounted inside the upper part of the base handel just below the camera so i can measure all the required gyroscopic values precisely 
-# i will make thos prototype work and not focus on any aestehtics because i can always upgrade them in the later V2 # 
-(UPDATE): The prototype V1 will be 2 axis only because it is easier to debug and develop the code unto  
-(UPDATE): i will combine hmc5883l magnetometer with mpu6050 because the mpu6050 does not have any magnetic rotary encoder which means it will give unrelaible yaw values which will drift over time 
-(UPDATE) so i ordered a MPU9250 because it has a magnetometer and is much more precisre and is 9Dof 
+# FEATURED
+- based on ESP32 S3 WROOM-1
+- Fully custom 3D designed parts
+- MPU6050 and HMC5883L used for motion tracking
+- Portable design
+- Custom PCB
+- Designed for phones / lightweight cameras (upto ~ 200g)
 
-# Stages of prototype 
-1. gimbal 3D design and iteration
-2. printing the design
-3. adding servo motors and other components
-4. writing the code
-5. rigrous tuning of PID controller
-6. noting down errors and other values like current used in mAh which will be the base values i will keep in mind while designing the controller
-7. remaking a better design of the gimabl i'll call it gimbal prototype V2
+# HOW DOES IT WORK
+The mpu6050 and HMC5883L countinuously track the relative motion of the gimbal and then send the signals to the motherboard the ESP32 based motherboard then processes the signals to understand the orientation and run 3 seperate PID loops for 3 seperate axes namely 
+- YAW
+- ROLL
+- PITCH
+After the signals are passed through an Alpha filter for clearning the NOISE then are send to their respective PID loop the values i found which work for this system are
+- For roll and Pitch axis
+- Kp->1.2
+- Ki->0
+- Kd->0.1
+
+I havent't really found the perfect values for the yaw axis as the yaw axis is the most unstable axis of the 3 axes and needs propery callibration  even more precise PID tuning for proper axis stability 
+
+These 3 PID loops are the heart of the program these loops need to be very precise for proper theoretical working of the system <br>
+I have a very good reason why i am using the word Theoretical
+because in reality the project suffered from bracket instability joint wobble and print arm fles during the prototype phase which i worked hard to eliminate in MARK-1
+
+# HARDWRE
+## 3D PRINTABLE ASSEMBLY 
+here is a render of the 3D printable design 
+<img width="1920" height="1080" alt="GYRA marl-1 with camera" src="https://github.com/user-attachments/assets/dce59ac7-e183-42e2-8ad5-0a4ff757f0f9" />
+<img width="1920" height="1080" alt="GYRA EXPLODED PNG" src="https://github.com/user-attachments/assets/cb24fc0f-3608-404c-8c5e-85e0b66a1462" />
+The entire assembly consists of a total of 6 files which are 
+- HEXALEGGED BASE (PCB housing)
+- PCB HOUSING LID
+- BASE HANDEL
+- YAW ARM
+- YAW--ROLL ARM
+- ROLL--PITCH ARM
+All of these are connected by mostly standard M3 screws whereas M2 screws may be required at some places such as the last 2 screws at ever arm of the 25T Aluminium CNC servo spline
+
+## PCB / elecronics 
+The pcb consists of the following majour parts 
+- ESP32 S3 WROOM-1 module
+- JST Connectors for
+  - MPU6050 (4-pinJST)
+  - HMC5883L (4-pinJST)
+  - SERVOS(incuding GND) (4-pinJST)
+  - Battery connector (2Pin JST)
+- Decoupling capacitors
+- IO0 and EN switched (SMD)
+- M3 mounting hole
+<img width="577" height="712" alt="image" src="https://github.com/user-attachments/assets/cc860c7f-f0ba-4dd9-90ae-8b7d2230a207" />
+<img width="593" height="629" alt="image" src="https://github.com/user-attachments/assets/658e4e0d-07cd-4d4e-a24a-787e9be7c67f" />
+<img width="695" height="708" alt="image" src="https://github.com/user-attachments/assets/9f687f2d-f694-4912-9130-0a69bc26c912" />
+
+Now here comes the important part for the connnections so no-1 you need to first of all connect the 6-li-ion battries enclosed in the base handle to a 2S BMS module and to a DC femlae jack for charging and then you need to diectly connect the VCCs and GNDs of the servos to the BMS module and now you need to make a 4 pin JST connector which is basically 3 pins for servos yaw-roll-pitch respectively and final pin GND.
+
+Now after this you need to  take the battry 7.4V and then connect it directly to the PCB as the PCB has a internal Step-Down voltage circuit but you need to be careful with the polarity. 
+
+Please refer to the PCB schematics while hotplate soldering / assembling your PCB because the BARE PCB does not have much marking as to such where which pin should be conected 
+
+
