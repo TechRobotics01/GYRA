@@ -10,7 +10,7 @@ This project exists because of a few reasons
 - extremely good learning project 
 - fully custom built so i can easily add my own features
 
-# FEATURED
+# FEATURES
 - based on ESP32 S3 WROOM-1
 - Fully custom 3D designed parts
 - MPU6050 and HMC5883L used for motion tracking
@@ -70,4 +70,30 @@ Now after this you need to  take the battry 7.4V and then connect it directly to
 
 Please refer to the PCB schematics while hotplate soldering / assembling your PCB because the BARE PCB does not have much marking as to such where which pin should be conected 
 
+# ZINE PAGE 
 
+<img width="871" height="1246" alt="GYRA_ZINE_page-0001" src="https://github.com/user-attachments/assets/ce9c08a6-fd64-4687-b739-1c3d9a38d381" />
+
+# PROBLEMS FACED
+there were a lot of problems i faced during the development of this project i have all the prototypes saved in subfolders in the CAD filder this project had a total of 5 iterated prototypes before i made the actual MARK-1 <br>
+so here is a list of probelms i faced <br>
+
+So first of all i had no inspiration and was designing the structure i had in my head when i built and tested the first printed prototype i found out many many fatal flaws such as the biggest one being that the roll arm was colliding with the base of the YAW arm where the sensor was seated and also that the motor constrians were misjudged second of all the arms were flexing because i made then longer than they needed to be and the arm used to jitter and shake because the motor could not take the load of the heavy arms and assembly <br>
+
+after like 3 iterations i finally took a bit of inspiration from ronin's gimbal and finally understood how the gimabl's standard structure should actually be first of all i was veru skeptical about if the motors could move the long arms or not as the length of the arms were almost excedding  the torue the motors could produced but once it was assembeled nd i tested it....IT worked just fine <br>
+
+Now here comes the biggest challenge i faced almost throughtout the project so first of alli was using MG995 motors's plastic head and attachments to connect the 3D printed arm with the motor which was an bad idea because it already had a bit of play which was only made worse by the motor repeatedly moving and wearking out the joint's teeth during Prottype's PID tuning and i found out the solution to this when i was sitting in my room at 12 AM and the idea of using CNC Aluminium 25T servo spline arm <br>
+<img width="216" height="162" alt="image" src="https://github.com/user-attachments/assets/4ebf853e-cf60-48cf-8eb0-661cf463f28c" />
+ This thing and now i designed the nre joint in accordance to the dimension's of the spline and i used properl M3 and M2 screws to mount the print on this isntead of using improper sized M2.2 screws everywhere and hoping it would work 
+
+ Overall this project was one of the best learning project i had made because it taught me many things related to 3D printing CAD and print tolerances
+ and also sharpened my skills of PCB and Embedded design design and overall project design and workflow 
+ The multiple failed prototypes challenged the appumptions i made and i developed a new kind of more efficient workflow than before 
+ 
+### I SPENT A TOTAL OF ~55 HOURS ON THIS PROJECT ###
+
+# CREDITS 
+- ME
+- google.com
+- chatgpt (FOR DEBUGGING AND GUIDANCE ONLY)
+- [randomnerdtutorial.com](https://randomnerdtutorials.com/)
