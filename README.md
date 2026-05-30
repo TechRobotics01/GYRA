@@ -74,6 +74,37 @@ Please refer to the PCB schematics while hotplate soldering / assembling your PC
 
 <img width="871" height="1246" alt="GYRA_ZINE_page-0001" src="https://github.com/user-attachments/assets/ce9c08a6-fd64-4687-b739-1c3d9a38d381" />
 
+# HOW TO BUILD IT FOR YOURSELF 
+So you want to make this project for yourself too <br>
+I have included each and every file and component that you will require in this repository and BOM 
+STEP-1
+- Buy all the parts in the BOM
+- Print the parts inside the Mark-1--->>STEP FILE folder (total of 6 parts)
+- Get the PCB fabricated and solder all the components neatly using the HOTPLATE
+- Test the PCB for any imporperly soldered parts/components
+- Assemble the pcb inside the 3D printed hexalegged base using M2 screws
+- Now connect the battries in a 2S3P manner
+- Cut and strip the wires and make it into a JST connector
+  - 1 FOR MPU6050
+  - 1 FOR HMC5883L
+  - 1 FOR SERVOS AND GND PIN
+  - 1 FOR THE BATTERY connector
+  - Solder the battery connections as stated under the "PCB / electronics part" and then house the battires inside the base handle
+  - Join the hexalegged base to the pcb lid using M3 and M2 screws whereever needed
+  - now assemble the above appembly consisting of
+    - Servos
+    - IMUs
+    - YAW arm
+    - YAW---PITCH arm
+    - PITCH----ROLL arm
+    - And then finally connect the 1/4th inch thread to the print
+    - Connect your camera or phone adapter
+    - Finally please use the code to TUNE your gimbal different tuning values are needed for different cameras because center of mass and orientation
+    - Affect the PID constants a lot
+    - After tuning your gimbal please hardcode the values into the gimbal (more info on that in a few days)
+    - And finally enjoy a gimbal you made!!!!  
+    WARNING: you may need to heat the 1/4th inch screw to 100*C so it can be properly housed inside the PITCH arm
+
 # PROBLEMS FACED
 there were a lot of problems i faced during the development of this project i have all the prototypes saved in subfolders in the CAD filder this project had a total of 5 iterated prototypes before i made the actual MARK-1 <br>
 so here is a list of probelms i faced <br>
