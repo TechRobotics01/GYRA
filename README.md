@@ -35,7 +35,7 @@ These 3 PID loops are the heart of the program these loops need to be very preci
 I have a very good reason why i am using the word Theoretical
 because in reality the project suffered from bracket instability joint wobble and print arm fles during the prototype phase which i worked hard to eliminate in MARK-1
 
-# HARDWRE
+# HARDWARE
 ## 3D PRINTABLE ASSEMBLY 
 here is a render of the 3D printable design 
 <img width="1920" height="1080" alt="GYRA marl-1 with camera" src="https://github.com/user-attachments/assets/dce59ac7-e183-42e2-8ad5-0a4ff757f0f9" />
