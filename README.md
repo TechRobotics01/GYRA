@@ -71,10 +71,10 @@ Now after this you need to  take the battry 7.4V and then connect it directly to
 Please refer to the PCB schematics while hotplate soldering / assembling your PCB because the BARE PCB does not have much marking as to such where which pin should be conected 
 
 # ZINE PAGE 
-
-<img width="871" height="1246" alt="GYRA_ZINE_page-0001" src="https://github.com/user-attachments/assets/ce9c08a6-fd64-4687-b739-1c3d9a38d381" />
+<img width="1398" height="2000" alt="GYRA" src="https://github.com/user-attachments/assets/576e8a3b-7c57-4866-b411-77d42e68fc64" />
 
 # BUILT IRL 
+Demo Video- https://youtu.be/y3TJgLPC-Hc
 <img width="1169" height="2599" alt="IMG_20260719_120033" src="https://github.com/user-attachments/assets/558a2710-1c53-489f-ae98-dd313cac5815" />
 <img width="1131" height="2513" alt="IMG_20260719_120014" src="https://github.com/user-attachments/assets/68a741b7-22c1-4bd6-b13f-c76a1b3fbddc" />
 <img width="1095" height="2432" alt="IMG_20260719_120004" src="https://github.com/user-attachments/assets/4048996d-802a-4696-ba2d-9668423ad19d" />
