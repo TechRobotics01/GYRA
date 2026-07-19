@@ -74,6 +74,16 @@ Please refer to the PCB schematics while hotplate soldering / assembling your PC
 
 <img width="871" height="1246" alt="GYRA_ZINE_page-0001" src="https://github.com/user-attachments/assets/ce9c08a6-fd64-4687-b739-1c3d9a38d381" />
 
+# BUILT IRL 
+<img width="1169" height="2599" alt="IMG_20260719_120033" src="https://github.com/user-attachments/assets/558a2710-1c53-489f-ae98-dd313cac5815" />
+<img width="1131" height="2513" alt="IMG_20260719_120014" src="https://github.com/user-attachments/assets/68a741b7-22c1-4bd6-b13f-c76a1b3fbddc" />
+<img width="1095" height="2432" alt="IMG_20260719_120004" src="https://github.com/user-attachments/assets/4048996d-802a-4696-ba2d-9668423ad19d" />
+<img width="1228" height="2729" alt="IMG_20260719_120026" src="https://github.com/user-attachments/assets/abe18516-aa30-40e4-bf7f-43193eac51d7" />
+
+GYRA has been built IRL!
+
+
+
 # HOW TO BUILD IT FOR YOURSELF 
 So you want to make this project for yourself too <br>
 I have included each and every file and component that you will require in this repository and BOM 
@@ -121,7 +131,7 @@ Now here comes the biggest challenge i faced almost throughtout the project so f
  and also sharpened my skills of PCB and Embedded design design and overall project design and workflow 
  The multiple failed prototypes challenged the appumptions i made and i developed a new kind of more efficient workflow than before 
  
-### I SPENT A TOTAL OF ~55 HOURS ON THIS PROJECT ###
+### I SPENT A TOTAL OF ~68 HOURS ON THIS PROJECT ###
 
 # CREDITS 
 - ME
